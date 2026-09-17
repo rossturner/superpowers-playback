@@ -6,6 +6,13 @@ import re
 
 PRE_SDD = json.load(open("/tmp/pre_sdd.json"))
 
+FILES = [
+    {"path": "specs/2026-09-17-image-upload-dialog-design.md",
+     "label": "Design spec — image upload dialog"},
+    {"path": "plans/2026-09-17-image-upload-dialog.md",
+     "label": "Implementation plan — 10 tasks"},
+]
+
 beats = []
 
 
@@ -13,17 +20,17 @@ def u(idx):
     beats.append({"type": "user", "text": PRE_SDD[idx]["text"]})
 
 
-def a(idx, docs_added=None):
+def a(idx, docs_revealed=None):
     beat = {"type": "assistant", "text": PRE_SDD[idx]["text"]}
-    if docs_added:
-        beat["docsAdded"] = docs_added
+    if docs_revealed:
+        beat["docsRevealed"] = docs_revealed
     beats.append(beat)
 
 
-def act(text, docs_added=None):
+def act(text, docs_revealed=None):
     beat = {"type": "activity", "text": text}
-    if docs_added:
-        beat["docsAdded"] = docs_added
+    if docs_revealed:
+        beat["docsRevealed"] = docs_revealed
     beats.append(beat)
 
 
@@ -100,8 +107,7 @@ a(63)
 act("Checked whether an uploader can delete an image mid-check, the reaper and "
     "unattached-delete conditions, and the routing builders — then wrote the "
     "design spec and committed it.",
-    docs_added=[{"path": "specs/2026-09-17-image-upload-dialog-design.md",
-                 "label": "Design spec — image upload dialog"}])
+    docs_revealed=["specs/2026-09-17-image-upload-dialog-design.md"])
 a(70)
 act("Read the spec-reviewer prompt template, then dispatched four parallel "
     "adversarial reviewers: API integration, frontend conventions, browser "
@@ -160,8 +166,7 @@ act("Checked service constructors, existing imageId tests, generated types, "
 a(129)
 act("Wrote the ten-task implementation plan, fixed a poll-count/abort test "
     "detail, and committed it.",
-    docs_added=[{"path": "plans/2026-09-17-image-upload-dialog.md",
-                 "label": "Implementation plan — 10 tasks"}])
+    docs_revealed=["plans/2026-09-17-image-upload-dialog.md"])
 a(132)
 
 # --- subagent-driven-development: task-section beats ---
@@ -247,5 +252,5 @@ for task in TASKS:
             "verdict": section["verdict"],
         })
 
-json.dump(beats, open("data/content.json", "w"), indent=2)
-print(f"wrote {len(beats)} beats to data/content.json")
+json.dump({"files": FILES, "beats": beats}, open("data/content.json", "w"), indent=2)
+print(f"wrote {len(beats)} beats and {len(FILES)} files to data/content.json")

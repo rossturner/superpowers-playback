@@ -12,17 +12,25 @@ const KIND_LABEL = {
   fix: 'fix',
 };
 
+let files = [];
 let beats = [];
 let revealed = 0;
 let playing = false;
 let pendingTimer = null;
 
 async function init() {
-  beats = await fetch('data/content.json').then((r) => r.json());
+  const data = await fetch('data/content.json').then((r) => r.json());
+  files = data.files;
+  beats = data.beats;
   render(false);
   document.getElementById('btn-prev').addEventListener('click', stepBack);
   document.getElementById('btn-next').addEventListener('click', stepForward);
   document.getElementById('btn-play').addEventListener('click', togglePlay);
+}
+
+function scrollToBottom() {
+  const body = document.getElementById('terminal-body');
+  body.scrollTop = body.scrollHeight;
 }
 
 function verdictClass(verdict) {
@@ -115,6 +123,7 @@ function appendMessageBeat(container, beat, animate, onDone) {
       setTimeout(() => {
         pulse.remove();
         line.appendChild(renderMarkdown(beat.text));
+        scrollToBottom();
         setTimeout(onDone, 550);
       }, 2200);
       return;
@@ -143,6 +152,7 @@ function typeText(el, text, onDone) {
   function step() {
     i++;
     el.textContent = text.slice(0, i);
+    scrollToBottom();
     if (i < text.length) {
       pendingTimer = setTimeout(step, speed);
     } else {
@@ -155,26 +165,24 @@ function typeText(el, text, onDone) {
 
 function renderDocsPanel() {
   const list = document.getElementById('docs-list');
-  const seen = new Map();
+  const createdPaths = new Set();
   for (let i = 0; i < revealed; i++) {
-    const docs = beats[i].docsAdded;
-    if (docs) docs.forEach((d) => seen.set(d.path, d.label));
+    const paths = beats[i].docsRevealed;
+    if (paths) paths.forEach((p) => createdPaths.add(p));
   }
   list.innerHTML = '';
-  if (seen.size === 0) {
-    list.innerHTML = '<li class="docs-empty">Nothing yet</li>';
-    return;
-  }
-  for (const [path, label] of seen) {
+  for (const file of files) {
+    const created = createdPaths.has(file.path);
     const li = document.createElement('li');
+    li.className = created ? 'doc-created' : 'doc-pending';
     const link = document.createElement('a');
-    link.href = `doc.html?file=${encodeURIComponent(path)}`;
+    link.href = `doc.html?file=${encodeURIComponent(file.path)}`;
     link.target = '_blank';
     link.rel = 'noopener';
-    link.textContent = label;
+    link.textContent = file.label;
     const pathEl = document.createElement('div');
     pathEl.className = 'doc-path';
-    pathEl.textContent = path;
+    pathEl.textContent = created ? file.path : `${file.path} (not written yet)`;
     li.appendChild(link);
     li.appendChild(pathEl);
     list.appendChild(li);
@@ -220,7 +228,7 @@ function render(animateNewest) {
 
   renderDocsPanel();
   updateProgress();
-  body.scrollTop = body.scrollHeight;
+  scrollToBottom();
 }
 
 function advanceIfPlaying() {

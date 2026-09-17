@@ -221,16 +221,32 @@ body {
   margin: 0 0 10px;
 }
 .docs-panel ul { list-style: none; margin: 0; padding: 0; }
-.docs-panel li { margin-bottom: 8px; }
-.docs-panel .docs-empty { color: var(--dim); font-size: 0.82rem; }
+.docs-panel li {
+  margin-bottom: 10px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border-left: 3px solid transparent;
+  transition: background 0.5s ease, border-color 0.5s ease, opacity 0.5s ease;
+}
 .docs-panel a {
-  color: var(--claude-2);
   text-decoration: none;
   font-size: 0.82rem;
   display: block;
 }
 .docs-panel a:hover { text-decoration: underline; }
-.docs-panel .doc-path { color: var(--dim); font-size: 0.7rem; }
+.docs-panel .doc-path { color: var(--dim); font-size: 0.68rem; margin-top: 2px; }
+
+.docs-panel li.doc-pending {
+  opacity: 0.5;
+}
+.docs-panel li.doc-pending a { color: var(--dim); }
+
+.docs-panel li.doc-created {
+  opacity: 1;
+  border-left-color: var(--pass);
+  background: rgba(63, 185, 80, 0.1);
+}
+.docs-panel li.doc-created a { color: var(--claude-2); font-weight: 600; }
 
 .controls {
   display: flex;
