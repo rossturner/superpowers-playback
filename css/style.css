@@ -137,9 +137,8 @@ body {
   color: var(--text);
 }
 
-.line.assistant .typing-body {
-  white-space: pre-wrap;
-  display: inline;
+.line.assistant .body + .body {
+  margin-top: 10px;
 }
 
 .line.assistant .body p:first-child { margin-top: 0; }

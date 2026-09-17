@@ -47,6 +47,34 @@
   th, td { border: 1px solid var(--border); padding: 6px 10px; text-align: left; }
   a { color: var(--link); }
   .error { color: #cf222e; }
+
+  details.doc-section {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+  details.doc-section summary {
+    cursor: pointer;
+    padding: 12px 16px;
+    font-weight: 600;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #f6f8fa;
+  }
+  details.doc-section summary::-webkit-details-marker { display: none; }
+  details.doc-section summary::before {
+    content: '▸';
+    color: var(--dim);
+    transition: transform 0.15s ease;
+    font-size: 0.8em;
+  }
+  details.doc-section[open] summary::before { transform: rotate(90deg); }
+  details.doc-section[open] summary { border-bottom: 1px solid var(--border); }
+  details.doc-section .section-body { padding: 14px 18px; }
+  details.doc-section .section-body :first-child { margin-top: 0; }
 </style>
 </head>
 <body>
@@ -58,6 +86,46 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script>
+  function isSectionHeading(token) {
+    return token.type === 'heading' && (token.depth === 2 || token.depth === 3);
+  }
+
+  function renderAsAccordion(text, root) {
+    root.innerHTML = '';
+    const tokens = marked.lexer(text);
+    let i = 0;
+
+    const introTokens = [];
+    while (i < tokens.length && !isSectionHeading(tokens[i])) {
+      introTokens.push(tokens[i++]);
+    }
+    if (introTokens.length) {
+      const intro = document.createElement('div');
+      intro.innerHTML = marked.parser(introTokens);
+      root.appendChild(intro);
+    }
+
+    while (i < tokens.length) {
+      const heading = tokens[i++];
+      const bodyTokens = [];
+      while (i < tokens.length && !isSectionHeading(tokens[i])) {
+        bodyTokens.push(tokens[i++]);
+      }
+      const details = document.createElement('details');
+      details.className = 'doc-section';
+      const summary = document.createElement('summary');
+      summary.innerHTML = marked.parseInline(heading.text);
+      details.appendChild(summary);
+      const sectionBody = document.createElement('div');
+      sectionBody.className = 'section-body';
+      sectionBody.innerHTML = marked.parser(bodyTokens);
+      details.appendChild(sectionBody);
+      root.appendChild(details);
+    }
+
+    root.querySelectorAll('pre code').forEach((b) => hljs.highlightElement(b));
+  }
+
   const params = new URLSearchParams(location.search);
   const file = params.get('file');
   const pathEl = document.getElementById('path');
@@ -73,8 +141,12 @@
         return r.text();
       })
       .then((text) => {
-        contentEl.innerHTML = marked.parse(text);
-        contentEl.querySelectorAll('pre code').forEach((b) => hljs.highlightElement(b));
+        if (file.startsWith('plans/')) {
+          renderAsAccordion(text, contentEl);
+        } else {
+          contentEl.innerHTML = marked.parse(text);
+          contentEl.querySelectorAll('pre code').forEach((b) => hljs.highlightElement(b));
+        }
         document.title = file.split('/').pop();
       })
       .catch((err) => {

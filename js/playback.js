@@ -26,6 +26,7 @@ async function init() {
   document.getElementById('btn-prev').addEventListener('click', stepBack);
   document.getElementById('btn-next').addEventListener('click', stepForward);
   document.getElementById('btn-play').addEventListener('click', togglePlay);
+  document.getElementById('btn-end').addEventListener('click', jumpToEnd);
 }
 
 function scrollToBottom() {
@@ -47,6 +48,29 @@ function renderMarkdown(text) {
   el.innerHTML = html;
   el.querySelectorAll('pre code').forEach((block) => hljs.highlightElement(block));
   return el;
+}
+
+function renderBlockHtml(token) {
+  const el = document.createElement('div');
+  el.className = 'body';
+  el.innerHTML = marked.parser([token]);
+  el.querySelectorAll('pre code').forEach((block) => hljs.highlightElement(block));
+  return el;
+}
+
+function revealBlocks(line, text, onDone) {
+  const tokens = marked.lexer(text).filter((t) => t.type !== 'space');
+  let idx = 0;
+  function next() {
+    if (idx >= tokens.length) {
+      onDone();
+      return;
+    }
+    line.appendChild(renderBlockHtml(tokens[idx++]));
+    scrollToBottom();
+    pendingTimer = setTimeout(next, 2000);
+  }
+  next();
 }
 
 function createTaskCard(title) {
@@ -93,22 +117,38 @@ function appendMessageBeat(container, beat, animate, onDone) {
     const label = document.createElement('span');
     label.className = 'label';
     label.textContent = 'you';
+    line.appendChild(label);
+    container.appendChild(line);
+    if (animate) {
+      const pulse = document.createElement('div');
+      pulse.className = 'responding';
+      pulse.textContent = 'Ross is thinking…';
+      line.appendChild(pulse);
+      pendingTimer = setTimeout(() => {
+        pulse.remove();
+        const row = document.createElement('div');
+        const prefix = document.createElement('span');
+        prefix.className = 'prefix';
+        prefix.textContent = '❯';
+        const body = document.createElement('span');
+        body.className = 'body';
+        row.appendChild(prefix);
+        row.appendChild(body);
+        line.appendChild(row);
+        typeText(body, beat.text, onDone, 1.6);
+      }, 2000);
+      return;
+    }
     const row = document.createElement('div');
     const prefix = document.createElement('span');
     prefix.className = 'prefix';
     prefix.textContent = '❯';
     const body = document.createElement('span');
     body.className = 'body';
+    body.textContent = beat.text;
     row.appendChild(prefix);
     row.appendChild(body);
-    line.appendChild(label);
     line.appendChild(row);
-    container.appendChild(line);
-    if (animate) {
-      typeText(body, beat.text, onDone, 1.6);
-      return;
-    }
-    body.textContent = beat.text;
   } else if (beat.type === 'assistant') {
     const label = document.createElement('span');
     label.className = 'label';
@@ -120,17 +160,9 @@ function appendMessageBeat(container, beat, animate, onDone) {
       pulse.className = 'responding';
       pulse.textContent = 'responding…';
       line.appendChild(pulse);
-      setTimeout(() => {
+      pendingTimer = setTimeout(() => {
         pulse.remove();
-        const body = document.createElement('span');
-        body.className = 'body typing-body';
-        line.appendChild(body);
-        typeText(body, beat.text, () => {
-          body.remove();
-          line.appendChild(renderMarkdown(beat.text));
-          scrollToBottom();
-          setTimeout(onDone, 550);
-        });
+        revealBlocks(line, beat.text, onDone);
       }, 2200);
       return;
     }
@@ -251,6 +283,12 @@ function stepForward() {
   if (playing) setPlaying(false);
   if (revealed >= beats.length) return;
   revealed++;
+  render(false);
+}
+
+function jumpToEnd() {
+  if (playing) setPlaying(false);
+  revealed = beats.length;
   render(false);
 }
 
