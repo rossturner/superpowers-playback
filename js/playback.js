@@ -105,7 +105,7 @@ function appendMessageBeat(container, beat, animate, onDone) {
     line.appendChild(row);
     container.appendChild(line);
     if (animate) {
-      typeText(body, beat.text, onDone);
+      typeText(body, beat.text, onDone, 1.6);
       return;
     }
     body.textContent = beat.text;
@@ -122,9 +122,15 @@ function appendMessageBeat(container, beat, animate, onDone) {
       line.appendChild(pulse);
       setTimeout(() => {
         pulse.remove();
-        line.appendChild(renderMarkdown(beat.text));
-        scrollToBottom();
-        setTimeout(onDone, 550);
+        const body = document.createElement('span');
+        body.className = 'body typing-body';
+        line.appendChild(body);
+        typeText(body, beat.text, () => {
+          body.remove();
+          line.appendChild(renderMarkdown(beat.text));
+          scrollToBottom();
+          setTimeout(onDone, 550);
+        });
       }, 2200);
       return;
     }
@@ -143,8 +149,8 @@ function appendMessageBeat(container, beat, animate, onDone) {
   if (animate && onDone) setTimeout(onDone, 350);
 }
 
-function typeText(el, text, onDone) {
-  const speed = Math.max(10, Math.min(55, 4500 / text.length));
+function typeText(el, text, onDone, speedMultiplier = 1) {
+  const speed = Math.max(10, Math.min(55, 4500 / text.length)) * speedMultiplier;
   let i = 0;
   const cursor = document.createElement('span');
   cursor.className = 'cursor';

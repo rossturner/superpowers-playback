@@ -137,6 +137,11 @@ body {
   color: var(--text);
 }
 
+.line.assistant .typing-body {
+  white-space: pre-wrap;
+  display: inline;
+}
+
 .line.assistant .body p:first-child { margin-top: 0; }
 .line.assistant .body code {
   background: #0d1117;
