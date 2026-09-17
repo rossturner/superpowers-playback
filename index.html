@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Session playback</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="app">
+    <header class="intro">
+      <h1>How I actually use Claude</h1>
+      <p>
+        This is a real Claude Code session, replayed message by message: a design conversation,
+        followed by an implementation plan built out by subagents. Nothing here is scripted —
+        it's the unedited exchange, compacted only where it's pure tool noise. Press play, or
+        step through it yourself.
+      </p>
+    </header>
+
+    <div class="main">
+      <div class="terminal">
+        <div class="terminal-chrome">
+          <div class="dots"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+          <div class="title">claude — sundial-cafe-frontend</div>
+        </div>
+        <div class="terminal-body" id="terminal-body"></div>
+      </div>
+
+      <aside class="docs-panel">
+        <h2>Files</h2>
+        <ul id="docs-list"><li class="docs-empty">Nothing yet</li></ul>
+      </aside>
+    </div>
+
+    <div class="controls">
+      <button id="btn-prev" aria-label="Step back">⏮</button>
+      <button id="btn-play" aria-label="Play">▶ Play</button>
+      <button id="btn-next" aria-label="Step forward">⏭</button>
+      <span class="progress" id="progress">0 / 0</span>
+    </div>
+  </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="js/playback.js"></script>
+</body>
+</html>
