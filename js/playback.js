@@ -82,13 +82,19 @@ function appendMessageBeat(container, beat, animate, onDone) {
   line.className = `line ${beat.type}`;
 
   if (beat.type === 'user') {
+    const label = document.createElement('span');
+    label.className = 'label';
+    label.textContent = 'you';
+    const row = document.createElement('div');
     const prefix = document.createElement('span');
     prefix.className = 'prefix';
     prefix.textContent = '❯';
     const body = document.createElement('span');
     body.className = 'body';
-    line.appendChild(prefix);
-    line.appendChild(body);
+    row.appendChild(prefix);
+    row.appendChild(body);
+    line.appendChild(label);
+    line.appendChild(row);
     container.appendChild(line);
     if (animate) {
       typeText(body, beat.text, onDone);
@@ -110,7 +116,7 @@ function appendMessageBeat(container, beat, animate, onDone) {
         pulse.remove();
         line.appendChild(renderMarkdown(beat.text));
         setTimeout(onDone, 550);
-      }, 450);
+      }, 2200);
       return;
     }
     line.appendChild(renderMarkdown(beat.text));
@@ -129,7 +135,7 @@ function appendMessageBeat(container, beat, animate, onDone) {
 }
 
 function typeText(el, text, onDone) {
-  const speed = Math.max(3, Math.min(30, 2000 / text.length));
+  const speed = Math.max(10, Math.min(55, 4500 / text.length));
   let i = 0;
   const cursor = document.createElement('span');
   cursor.className = 'cursor';

@@ -87,7 +87,27 @@ body {
 
 .line { margin-bottom: 16px; }
 
-.line.user { color: var(--user); }
+.line.user,
+.line.assistant {
+  margin-bottom: 26px;
+  padding: 12px 18px;
+  border-radius: 6px;
+  border-left: 4px solid transparent;
+}
+
+.line.user {
+  color: var(--user);
+  background: rgba(126, 231, 135, 0.12);
+  border-left-color: var(--user);
+}
+.line.user .label {
+  color: var(--user);
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  display: block;
+  margin-bottom: 6px;
+}
 .line.user .prefix { margin-right: 6px; }
 .line.user .body { color: var(--text); white-space: pre-wrap; }
 
@@ -95,8 +115,14 @@ body {
   color: var(--dim);
   font-style: italic;
   font-size: 0.82rem;
+  margin: 10px 0 10px 16px;
 }
 .line.activity .prefix { margin-right: 6px; }
+
+.line.assistant {
+  background: rgba(255, 166, 87, 0.1);
+  border-left-color: var(--claude);
+}
 
 .line.assistant .label {
   color: var(--claude);
@@ -104,7 +130,7 @@ body {
   font-size: 0.78rem;
   letter-spacing: 0.04em;
   display: block;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 
 .line.assistant .body {
