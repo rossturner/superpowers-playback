@@ -168,6 +168,9 @@ act("Wrote the ten-task implementation plan, fixed a poll-count/abort test "
     "detail, and committed it.",
     docs_revealed=["plans/2026-09-17-image-upload-dialog.md"])
 a(132)
+u_custom("/compact")
+act("Compacted the session context, then resumed from its summary.")
+u_custom("/superpowers-ross:subagent-driven-development")
 
 # --- subagent-driven-development: task-section beats ---
 TASKS = [

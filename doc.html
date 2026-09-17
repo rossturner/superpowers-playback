@@ -90,6 +90,14 @@
     return token.type === 'heading' && (token.depth === 2 || token.depth === 3);
   }
 
+  function isFileStructureHeading(token) {
+    return token.type === 'heading' && token.depth === 2 && token.text === 'File structure';
+  }
+
+  function isTaskHeading(token) {
+    return token.type === 'heading' && token.depth === 3 && /^Task \d+:/.test(token.text);
+  }
+
   function renderAsAccordion(text, root) {
     root.innerHTML = '';
     const tokens = marked.lexer(text);
@@ -111,6 +119,13 @@
       while (i < tokens.length && !isSectionHeading(tokens[i])) {
         bodyTokens.push(tokens[i++]);
       }
+
+      if (isFileStructureHeading(heading)) {
+        while (i < tokens.length && !isTaskHeading(tokens[i]) && !(tokens[i].type === 'heading' && tokens[i].depth === 2)) {
+          bodyTokens.push(tokens[i++]);
+        }
+      }
+
       const details = document.createElement('details');
       details.className = 'doc-section';
       const summary = document.createElement('summary');

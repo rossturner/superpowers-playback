@@ -5,26 +5,73 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Session playback</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=5">
 </head>
 <body>
-  <div class="app">
-    <header class="intro">
-      <h1>How I actually use Claude</h1>
-      <p>
-        This is a real Claude Code session, replayed message by message: a design conversation,
-        followed by an implementation plan built out by subagents. Nothing here is scripted —
-        it's the unedited exchange, compacted only where it's pure tool noise. Press play, or
-        step through it yourself.
-      </p>
-    </header>
+  <section class="intro-screen" id="intro-screen" aria-labelledby="intro-title">
+    <div class="intro-content">
+      <p class="eyebrow">Session playback</p>
+      <h1 id="intro-title">How I work with AI on a coding project</h1>
+      <section class="intro-section">
+        <h2>The workflow</h2>
+        <p>
+          I've created the following visualisation to explain the scope and depth I go into in my usual workflow with AI for coding, which is making use of the superpowers plugin, and it's workflow which is an in-depth brainstorming session, followed by writing a spec and implementation plan which is then implemented automatically by using subagents to perform focused implementation tasks, followed by code review and scope/spec review gates, and follow-up fixes before proceeding to the next task.
+        </p>
+      </section>
 
+      <section class="intro-section">
+        <h2>The project</h2>
+        <p>
+          I'm currently working on a retro-themed social media project, kind of a mix of MySpace and LiveJournal and others, with thematic "day" and "night" sides to the user-facing website. The project is made up of 3 separate repositories:
+        </p>
+
+        <div class="repo-grid" aria-label="Project repositories">
+          <section class="repo-card">
+            <h3>Frontend</h3>
+            <p>Which is a Next.js/React application, using Next.js for server-side rendering rather than a traditional SPA.</p>
+          </section>
+          <section class="repo-card">
+            <h3>API</h3>
+            <p>Which is a Spring Boot java app using jOOQ and Flyway.</p>
+          </section>
+          <section class="repo-card">
+            <h3>Scratchpad</h3>
+            <p>Which holds cross-cutting documentation only including a "roadmap" which is a glorified to-do list of the features I plan to implement.</p>
+          </section>
+        </div>
+      </section>
+
+      <section class="intro-section">
+        <h2>How the projects guide the agent</h2>
+        <p>
+          The two "real" projects have their own markdown documentation explaining their architecture, testing strategy and other information that supplies the AI agent with how I want components and classes to be built and test-driven (though superpowers itself describes test-driven development too) such that I don't need to hand-hold it to do this in the way that I want it to. An effective way of working with AI is to evolve these documents over time based on the results of prior sessions.
+        </p>
+      </section>
+
+      <section class="intro-section">
+        <h2>The image-upload foundation</h2>
+        <p>
+          Prior to the session I'm about to run through, I had implemented an image upload endpoint on the API which accepts images, resizes them, and sends them to be checked by third parties for abusive or illegal content before they are approved and made available to end users, which is done by hosting them in Bunny storage (similar to Amazon S3) which is itself behind a CDN provided by Bunny. The API also produces an extremely low resolution thumbnail or hash of the image which can be used as a placeholder before it loads fully on the client, like that provided by <a href="https://blurha.sh" target="_blank" rel="noopener">https://blurha.sh</a>
+        </p>
+      </section>
+
+      <section class="intro-section">
+        <h2>What this session covers</h2>
+        <p>
+          My goal for this session is to design and implement an image upload component which resizes the image in the browser before uploading it to the API and provide useful progress and feedback/error messages in such a way that I can reuse throughout the frontend, though for now only a user's profile page is implemented as a place we can make use of this component. I go into the details of how I want to achieve this, which ends up including API changes though I usually aim to only work in one project at a time, though I initially have to give very little information because the codebase and living documentation provides enough context for the agent to understand what it is I am trying to achieve. The result of this is a spec and implementation plan which you can view separately, and I can trust the agent to work through autonomously, requiring no further input from me which frees me up to do other things.
+        </p>
+      </section>
+      <button class="start-playback" id="btn-start" type="button" disabled>Start the session playback</button>
+    </div>
+  </section>
+
+  <div class="app playback" id="playback" hidden>
     <div class="main">
       <div class="terminal">
         <div class="terminal-chrome">
           <div class="dots"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
-          <div class="title">claude — sundial-cafe-frontend</div>
+          <div class="title">claude — frontend project</div>
         </div>
         <div class="terminal-body" id="terminal-body"></div>
       </div>
@@ -46,6 +93,6 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-<script src="js/playback.js"></script>
+<script src="js/playback.js?v=5"></script>
 </body>
 </html>

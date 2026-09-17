@@ -19,14 +19,32 @@ let playing = false;
 let pendingTimer = null;
 
 async function init() {
-  const data = await fetch('data/content.json').then((r) => r.json());
+  const startButton = document.getElementById('btn-start');
+  startButton.addEventListener('click', startPlayback);
+  const data = await fetch('data/content.json', { cache: 'no-store' }).then((r) => r.json());
   files = data.files;
   beats = data.beats;
   render(false);
+  startButton.disabled = false;
   document.getElementById('btn-prev').addEventListener('click', stepBack);
   document.getElementById('btn-next').addEventListener('click', stepForward);
   document.getElementById('btn-play').addEventListener('click', togglePlay);
   document.getElementById('btn-end').addEventListener('click', jumpToEnd);
+}
+
+function startPlayback() {
+  if (!beats.length || playing) return;
+
+  document.getElementById('btn-start').disabled = true;
+  const intro = document.getElementById('intro-screen');
+  const playback = document.getElementById('playback');
+  playback.hidden = false;
+  requestAnimationFrame(() => playback.classList.add('is-visible'));
+  intro.classList.add('is-leaving');
+  setTimeout(() => { intro.hidden = true; }, 320);
+
+  setPlaying(true);
+  advanceIfPlaying();
 }
 
 function scrollToBottom() {
@@ -82,9 +100,10 @@ function createTaskCard(title) {
   return card;
 }
 
-function appendTaskSection(card, beat) {
+function appendTaskSection(card, beat, animate) {
   const row = document.createElement('div');
   row.className = 'task-section-row';
+  if (animate) row.classList.add('is-new');
 
   const icon = document.createElement('span');
   icon.className = 'kind-icon';
@@ -135,7 +154,7 @@ function appendMessageBeat(container, beat, animate, onDone) {
         row.appendChild(prefix);
         row.appendChild(body);
         line.appendChild(row);
-        typeText(body, beat.text, onDone, 1.6);
+        typeText(body, beat.text, onDone);
       }, 2000);
       return;
     }
@@ -181,8 +200,8 @@ function appendMessageBeat(container, beat, animate, onDone) {
   if (animate && onDone) setTimeout(onDone, 350);
 }
 
-function typeText(el, text, onDone, speedMultiplier = 1) {
-  const speed = Math.max(10, Math.min(55, 4500 / text.length)) * speedMultiplier;
+function typeText(el, text, onDone) {
+  const speed = 32;
   let i = 0;
   const cursor = document.createElement('span');
   cursor.className = 'cursor';
@@ -249,9 +268,9 @@ function render(animateNewest) {
         body.appendChild(currentCard);
         currentTitle = beat.task;
       }
-      appendTaskSection(currentCard, beat);
+      appendTaskSection(currentCard, beat, isNewest && animateNewest);
       if (isNewest && animateNewest) {
-        pendingTimer = setTimeout(advanceIfPlaying, 300);
+        pendingTimer = setTimeout(advanceIfPlaying, 2400);
       }
     } else {
       currentCard = null;

@@ -309,6 +309,18 @@
       "text": "I've written and committed the plan to `docs/superpowers/plans/2026-09-17-image-upload-dialog.md` (`bbc5430`). I'd recommend `/compact`, then `subagent-driven-development` to carry it out.\n\nIt has ten tasks, in this order:\n1. **Browser measurements.** A throwaway script checks how Chromium, Firefox and WebKit decode and resize large and rotated photos. The results are committed as a findings file, and they fix the resize code before it's written.\n2. **API: profile photo endpoints.** `PUT` and `DELETE` for the day and night photo. The full profile writes stop carrying `imageId`, and `ProfileUpdate` is deleted.\n3. **API: upload changes.** The `exif` part and a record of where the EXIF came from, the 320-pixel minimum, flattening onto white, the night gates, and the 30-second polling description.\n4. **Frontend: new contract and browser client.** The frontend picks up the new API contract and gets the browser client, which refreshes the session on a `401`. The 12 MB proxy limit and the narrowed `CLAUDE.md` rule go in here too.\n5. **Photo preparation in the browser.** Planning the upload, reading the JPEG header, the pica resize, and the CSP change.\n6. **Upload operations and polling.** The upload and check logic sits behind one interface, with the polling loop, the busy retry and the mock operations.\n7. **The upload dialog.** The dialog and drop zone with their copy and workbench specimens.\n8. **The profile photo control** on all four profile pages, with removal.\n9. **Documentation.** `docs/image-handling.md` and the three scratchpad documents.\n10. **Final verification** with real high-resolution photos, including a check that `upload_ip` holds the member's address.\n\nWhile reading the code I found two things the spec didn't mention, and the plan covers both:\n- **Small test images:** several API test images are under 320 pixels, including the two photos the hash-matching tests use (256 and 128 pixels). Task 3 makes larger versions and checks that the 512-pixel one still scores a match quality of at least 50.\n- **Commit order:** removing `imageId` breaks the frontend's typecheck, and the commit hook runs typecheck. So the frontend's contract update and the profile save changes go into a single commit in Task 4."
     },
     {
+      "type": "user",
+      "text": "/compact"
+    },
+    {
+      "type": "activity",
+      "text": "Compacted the session context, then resumed from its summary."
+    },
+    {
+      "type": "user",
+      "text": "/superpowers-ross:subagent-driven-development"
+    },
+    {
       "type": "task-section",
       "task": "Task 1: browser measurements",
       "kind": "implementation",
