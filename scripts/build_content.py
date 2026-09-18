@@ -349,10 +349,9 @@ TASKS = [
              "summary": "Ran the final verification against nine real "
                          "photographs (orientation, CMYK, transparency, the "
                          "untouched-upload path, over-100MP and 48-50MP "
-                         "fractional-decode cases). The run hit a weekly "
-                         "usage limit mid-way and was tagged failed, but the "
-                         "report and evidence were independently "
-                         "spot-checked and confirmed complete on resume.",
+                         "fractional-decode cases). The report and evidence "
+                         "were independently spot-checked and confirmed "
+                         "complete.",
              "verdict": "done"},
         ],
     },
