@@ -16,8 +16,8 @@ FILES = [
 beats = []
 
 
-def u(idx):
-    beats.append({"type": "user", "text": PRE_SDD[idx]["text"]})
+def u(idx, override=None):
+    beats.append({"type": "user", "text": override or PRE_SDD[idx]["text"]})
 
 
 def a(idx, docs_revealed=None):
@@ -86,7 +86,10 @@ a(42)
 act("Read the API's image reducer and how it extracts EXIF data from an "
     "uploaded file.")
 a(45)
-u(46)
+u(46, override="I guess we go with option 1 and send the exif to the API, though I "
+                "prefer resplicing it into the produced jpeg if we can be confident "
+                "that this will copy anything and everything from the originals "
+                "metadata")
 a(47)
 u(48)
 a(49)

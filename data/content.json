@@ -140,7 +140,7 @@
     },
     {
       "type": "user",
-      "text": "I guess we go with option 1 and send the exit to the API, though I prefer resplicing it into the produced jpeg if we can be confident that this will copy anything and everything from the originals metadata"
+      "text": "I guess we go with option 1 and send the exif to the API, though I prefer resplicing it into the produced jpeg if we can be confident that this will copy anything and everything from the originals metadata"
     },
     {
       "type": "assistant",
