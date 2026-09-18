@@ -405,8 +405,180 @@
       "task": "Task 3: API upload endpoint changes",
       "kind": "implementation",
       "round": null,
-      "summary": "Now running, unblocked once Task 2 completed.",
-      "verdict": "in progress"
+      "summary": "Built the upload endpoint's browser exif part, the 320-pixel minimum, stored-image flattening and night gates.",
+      "verdict": "done"
+    },
+    {
+      "type": "task-section",
+      "task": "Task 3: API upload endpoint changes",
+      "kind": "spec-review",
+      "round": null,
+      "summary": "The diff ran over the reviewer's default 2,000-line read limit, so both reviewers were given a raised limit to avoid truncation; came back clean.",
+      "verdict": "pass"
+    },
+    {
+      "type": "task-section",
+      "task": "Task 3: API upload endpoint changes",
+      "kind": "code-review",
+      "round": null,
+      "summary": "Clean on both reviews; Task 3 marked complete.",
+      "verdict": "pass"
+    },
+    {
+      "type": "task-section",
+      "task": "Task 4: frontend contract and browser client",
+      "kind": "implementation",
+      "round": null,
+      "summary": "Regenerated the frontend's API contract and built the browser client with session refresh on 401.",
+      "verdict": "done"
+    },
+    {
+      "type": "task-section",
+      "task": "Task 4: frontend contract and browser client",
+      "kind": "spec-review",
+      "round": null,
+      "summary": "Clean.",
+      "verdict": "pass"
+    },
+    {
+      "type": "task-section",
+      "task": "Task 4: frontend contract and browser client",
+      "kind": "code-review",
+      "round": null,
+      "summary": "Flagged an aborted-signal hang.",
+      "verdict": "1 issue"
+    },
+    {
+      "type": "task-section",
+      "task": "Task 4: frontend contract and browser client",
+      "kind": "fix",
+      "round": 1,
+      "summary": "Implementer fixed the aborted-signal hang.",
+      "verdict": "fix applied"
+    },
+    {
+      "type": "task-section",
+      "task": "Task 4: frontend contract and browser client",
+      "kind": "code-review",
+      "round": 1,
+      "summary": "Re-review confirmed the fix \u2014 Task 4 marked complete.",
+      "verdict": "pass"
+    },
+    {
+      "type": "task-section",
+      "task": "Task 6: upload operations and polling",
+      "kind": "implementation",
+      "round": null,
+      "summary": "Built the upload operations and polling loop on top of Task 4's browser client.",
+      "verdict": "done"
+    },
+    {
+      "type": "task-section",
+      "task": "Task 6: upload operations and polling",
+      "kind": "spec-review",
+      "round": null,
+      "summary": "Clean.",
+      "verdict": "pass"
+    },
+    {
+      "type": "task-section",
+      "task": "Task 6: upload operations and polling",
+      "kind": "code-review",
+      "round": null,
+      "summary": "Clean on both reviews; Task 6 marked complete.",
+      "verdict": "pass"
+    },
+    {
+      "type": "task-section",
+      "task": "Task 7: upload dialog and drop zone",
+      "kind": "implementation",
+      "round": null,
+      "summary": "Built the upload dialog and drop zone.",
+      "verdict": "done"
+    },
+    {
+      "type": "task-section",
+      "task": "Task 7: upload dialog and drop zone",
+      "kind": "spec-review",
+      "round": null,
+      "summary": "Clean.",
+      "verdict": "pass"
+    },
+    {
+      "type": "task-section",
+      "task": "Task 7: upload dialog and drop zone",
+      "kind": "code-review",
+      "round": null,
+      "summary": "Flagged mis-routed attach/check error handling.",
+      "verdict": "1 issue"
+    },
+    {
+      "type": "task-section",
+      "task": "Task 7: upload dialog and drop zone",
+      "kind": "fix",
+      "round": 1,
+      "summary": "Implementer fixed the mis-routed error handling.",
+      "verdict": "fix applied"
+    },
+    {
+      "type": "task-section",
+      "task": "Task 7: upload dialog and drop zone",
+      "kind": "code-review",
+      "round": 1,
+      "summary": "Re-review clean \u2014 Task 7 marked complete, with one minor observation deferred to the final whole-branch review.",
+      "verdict": "pass"
+    },
+    {
+      "type": "task-section",
+      "task": "Task 8: profile photo controls",
+      "kind": "implementation",
+      "round": null,
+      "summary": "Wired the dialog into the profile pages. Along the way, traced a build failure to a pre-existing, unrelated commit and left it out of scope, noting it for the final report.",
+      "verdict": "done"
+    },
+    {
+      "type": "task-section",
+      "task": "Task 8: profile photo controls",
+      "kind": "spec-review",
+      "round": null,
+      "summary": "Clean.",
+      "verdict": "pass"
+    },
+    {
+      "type": "task-section",
+      "task": "Task 8: profile photo controls",
+      "kind": "code-review",
+      "round": null,
+      "summary": "Clean on both reviews; Task 8 marked complete.",
+      "verdict": "pass"
+    },
+    {
+      "type": "task-section",
+      "task": "Task 9: durable documentation",
+      "kind": "implementation",
+      "round": null,
+      "summary": "Brought the durable documentation up to date across both repositories.",
+      "verdict": "done"
+    },
+    {
+      "type": "task-section",
+      "task": "Task 9: durable documentation",
+      "kind": "spec-review",
+      "round": null,
+      "summary": "Clean \u2014 as a small, mechanical task it skipped a separate code-quality review, per the model-selection rule for trivial tasks.",
+      "verdict": "pass"
+    },
+    {
+      "type": "task-section",
+      "task": "Task 10: final verification with real photographs",
+      "kind": "implementation",
+      "round": null,
+      "summary": "Ran the final verification against nine real photographs (orientation, CMYK, transparency, the untouched-upload path, over-100MP and 48-50MP fractional-decode cases). The run hit a weekly usage limit mid-way and was tagged failed, but the report and evidence were independently spot-checked and confirmed complete on resume.",
+      "verdict": "done"
+    },
+    {
+      "type": "assistant",
+      "text": "The image upload dialog is built, reviewed and squashed into three commits, one per repository, all on `master`, none pushed:\n\n- **frontend** `2b9f2f3` \u2014 the dialog itself: the browser client with session refresh, the pica-based photo preparation, the polling loop, the staged dialog and drop zone, and the profile page wiring with removal, on both sides.\n- **api** `426ea3ff` \u2014 the profile image `PUT`/`DELETE` endpoints, and the upload endpoint's EXIF part, 320-pixel minimum, flattening, and night gates.\n- **scratchpad** `68a450f` \u2014 the roadmap ticks and the EXIF-source reasoning.\n\nAll ten plan tasks passed their two-reviewer gate, one fix round each on Tasks 2, 4 and 7 (all resolved and re-reviewed clean). The two whole-branch reviews (frontend and API) came back clean with no Critical or Important findings; typecheck, lint and the full test suites pass in both repositories (1612 frontend tests, the API's full `./gradlew check`).\n\nTwo things outside this plan's scope, found along the way and not fixed here:\n- `npm run build` fails on `master` from before this plan started \u2014 `components/profile/edit/NightBodyPanel.tsx` pulls the server-only API client into a client bundle via `lib/member/night.ts`. Confirmed pre-existing (commit `4e31817`).\n- A hard navigation to `/profile` throws during server rendering (`components/rewards/ReferralInvite.tsx:15` reads `window.location.origin` in a client component's render body). Also unrelated and pre-existing.\n\nTask 10's real-photograph verification is in `$SCRATCH/verification/image-upload/` (not committed, per the plan \u2014 it's yours to check). `report.md` found no mismatches against the spec across nine photographs, including the over-100MP and 48\u201350MP fractional-decode cases, orientation, CMYK, transparency and the untouched-upload path. The one local-only finding, `upload_ip` staying `127.0.0.1` instead of the test header's address, is the deploy-time gap the brief itself anticipated (Tomcat's `remote-ip-header` is set only in `application-prod.yml`) \u2014 a real pre-launch checklist item, not a bug. The Apple phone/HEIC check remains on that same pre-launch roadmap line, unattempted, as agreed at the start."
     }
   ]
 }

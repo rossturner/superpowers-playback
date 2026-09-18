@@ -238,8 +238,122 @@ TASKS = [
         "title": "Task 3: API upload endpoint changes",
         "sections": [
             {"kind": "implementation",
-             "summary": "Now running, unblocked once Task 2 completed.",
-             "verdict": "in progress"},
+             "summary": "Built the upload endpoint's browser exif part, the "
+                         "320-pixel minimum, stored-image flattening and "
+                         "night gates.",
+             "verdict": "done"},
+            {"kind": "spec-review",
+             "summary": "The diff ran over the reviewer's default 2,000-line "
+                         "read limit, so both reviewers were given a raised "
+                         "limit to avoid truncation; came back clean.",
+             "verdict": "pass"},
+            {"kind": "code-review",
+             "summary": "Clean on both reviews; Task 3 marked complete.",
+             "verdict": "pass"},
+        ],
+    },
+    {
+        "title": "Task 4: frontend contract and browser client",
+        "sections": [
+            {"kind": "implementation",
+             "summary": "Regenerated the frontend's API contract and built "
+                         "the browser client with session refresh on 401.",
+             "verdict": "done"},
+            {"kind": "spec-review",
+             "summary": "Clean.",
+             "verdict": "pass"},
+            {"kind": "code-review",
+             "summary": "Flagged an aborted-signal hang.",
+             "verdict": "1 issue"},
+            {"kind": "fix", "round": 1,
+             "summary": "Implementer fixed the aborted-signal hang.",
+             "verdict": "fix applied"},
+            {"kind": "code-review", "round": 1,
+             "summary": "Re-review confirmed the fix — Task 4 marked "
+                         "complete.",
+             "verdict": "pass"},
+        ],
+    },
+    {
+        "title": "Task 6: upload operations and polling",
+        "sections": [
+            {"kind": "implementation",
+             "summary": "Built the upload operations and polling loop on "
+                         "top of Task 4's browser client.",
+             "verdict": "done"},
+            {"kind": "spec-review",
+             "summary": "Clean.",
+             "verdict": "pass"},
+            {"kind": "code-review",
+             "summary": "Clean on both reviews; Task 6 marked complete.",
+             "verdict": "pass"},
+        ],
+    },
+    {
+        "title": "Task 7: upload dialog and drop zone",
+        "sections": [
+            {"kind": "implementation",
+             "summary": "Built the upload dialog and drop zone.",
+             "verdict": "done"},
+            {"kind": "spec-review",
+             "summary": "Clean.",
+             "verdict": "pass"},
+            {"kind": "code-review",
+             "summary": "Flagged mis-routed attach/check error handling.",
+             "verdict": "1 issue"},
+            {"kind": "fix", "round": 1,
+             "summary": "Implementer fixed the mis-routed error handling.",
+             "verdict": "fix applied"},
+            {"kind": "code-review", "round": 1,
+             "summary": "Re-review clean — Task 7 marked complete, with one "
+                         "minor observation deferred to the final "
+                         "whole-branch review.",
+             "verdict": "pass"},
+        ],
+    },
+    {
+        "title": "Task 8: profile photo controls",
+        "sections": [
+            {"kind": "implementation",
+             "summary": "Wired the dialog into the profile pages. Along the "
+                         "way, traced a build failure to a pre-existing, "
+                         "unrelated commit and left it out of scope, noting "
+                         "it for the final report.",
+             "verdict": "done"},
+            {"kind": "spec-review",
+             "summary": "Clean.",
+             "verdict": "pass"},
+            {"kind": "code-review",
+             "summary": "Clean on both reviews; Task 8 marked complete.",
+             "verdict": "pass"},
+        ],
+    },
+    {
+        "title": "Task 9: durable documentation",
+        "sections": [
+            {"kind": "implementation",
+             "summary": "Brought the durable documentation up to date "
+                         "across both repositories.",
+             "verdict": "done"},
+            {"kind": "spec-review",
+             "summary": "Clean — as a small, mechanical task it skipped a "
+                         "separate code-quality review, per the "
+                         "model-selection rule for trivial tasks.",
+             "verdict": "pass"},
+        ],
+    },
+    {
+        "title": "Task 10: final verification with real photographs",
+        "sections": [
+            {"kind": "implementation",
+             "summary": "Ran the final verification against nine real "
+                         "photographs (orientation, CMYK, transparency, the "
+                         "untouched-upload path, over-100MP and 48-50MP "
+                         "fractional-decode cases). The run hit a weekly "
+                         "usage limit mid-way and was tagged failed, but the "
+                         "report and evidence were independently "
+                         "spot-checked and confirmed complete on resume.",
+             "verdict": "done"},
         ],
     },
 ]
@@ -254,6 +368,9 @@ for task in TASKS:
             "summary": section["summary"],
             "verdict": section["verdict"],
         })
+
+FINAL_SUMMARY = json.load(open("/tmp/sdd2.json"))[197]["text"]
+beats.append({"type": "assistant", "text": FINAL_SUMMARY})
 
 json.dump({"files": FILES, "beats": beats}, open("data/content.json", "w"), indent=2)
 print(f"wrote {len(beats)} beats and {len(FILES)} files to data/content.json")
